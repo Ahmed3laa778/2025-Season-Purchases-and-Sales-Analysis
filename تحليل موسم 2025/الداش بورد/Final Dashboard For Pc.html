@@ -1,0 +1,1584 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌴 Egypt Palm</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+/* ======================================================
+   الأنماط المشتركة (من الملفات الثلاثة)
+   ====================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@300;400;500;700&display=swap');
+
+:root {
+  --gold: #C9962A;
+  --gold-lt: #E8BF6A;
+  --gold-dk: #8A650C;
+  --sand: #F5EDD8;
+  --ink: #1A2B1A;
+  --ink-mid: #2C5F2D;
+  --bark: #4A7C3F;
+  --green: #2E7D32;
+  --green-lt: #52B788;
+  --sky: #1B4F72;
+  --sky-lt: #2E86C1;
+  --cream: #F4F7F2;
+  --shadow: rgba(26,43,26,0.12);
+  --premium: #1B4F72;
+  --delight: #2D6A4F;
+  --classic: #7A5230;
+  --g4: #B71C1C;
+  --golden: #8E44AD;
+  --good: #2E7D32;
+  --warn: #E65100;
+  --bad: #B71C1C;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Cairo', 'Tajawal', sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  min-height: 100vh;
+}
+
+/* ======================================================
+   HEADER (من الملف الأول + الثاني + الثالث)
+   ====================================================== */
+header {
+  background: linear-gradient(135deg, var(--ink) 0%, var(--ink-mid) 60%, var(--gold-dk) 100%);
+  padding: 32px 48px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+header::before {
+  content: '🌴';
+  position: absolute;
+  left: -10px;
+  top: -20px;
+  font-size: 160px;
+  opacity: 0.06;
+  transform: rotate(-15deg);
+}
+header::after {
+  content: '🌴';
+  position: absolute;
+  right: 40px;
+  bottom: -30px;
+  font-size: 130px;
+  opacity: 0.05;
+  transform: rotate(10deg);
+}
+.header-text h1 {
+  font-size: 1.9rem;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1.2;
+}
+.header-text p {
+  color: var(--gold-lt);
+  font-size: 0.9rem;
+  margin-top: 6px;
+}
+.header-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+.header-badge {
+  background: var(--gold);
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 0.82rem;
+  padding: 7px 18px;
+  border-radius: 30px;
+}
+
+/* ======================================================
+   تبويبات الملاحة الرئيسية (دمج الملفات الثلاثة)
+   ====================================================== */
+.nav-tabs {
+  display: flex;
+  gap: 0;
+  background: #fff;
+  border-bottom: 2px solid var(--sand);
+  padding: 0 40px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px var(--shadow);
+  flex-wrap: wrap;
+}
+.tab-btn {
+  padding: 14px 22px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #888;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  transition: all .2s;
+  white-space: nowrap;
+}
+.tab-btn.active {
+  color: var(--gold-dk);
+  border-bottom-color: var(--gold);
+}
+.tab-btn:hover {
+  color: var(--ink);
+}
+
+/* ======================================================
+   الصفحات / التبويبات
+   ====================================================== */
+.page {
+  display: none;
+  padding: 32px 40px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+.page.active {
+  display: block;
+}
+
+/* ======================================================
+   مكونات مشتركة (KPI, Cards, Charts, Tables, etc.)
+   ====================================================== */
+.kpi-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 28px;
+}
+.kpi-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 22px 24px;
+  box-shadow: 0 2px 16px var(--shadow);
+  border-top: 4px solid transparent;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: transform .2s;
+}
+.kpi-card:hover { transform: translateY(-3px); }
+.kpi-card:nth-child(1) { border-top-color: var(--gold); }
+.kpi-card:nth-child(2) { border-top-color: var(--green); }
+.kpi-card:nth-child(3) { border-top-color: var(--sky); }
+.kpi-card:nth-child(4) { border-top-color: var(--bark); }
+.kpi-icon { font-size: 1.8rem; }
+.kpi-label {
+  font-size: 0.75rem;
+  color: #999;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .8px;
+}
+.kpi-value {
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--ink);
+  line-height: 1;
+}
+.kpi-sub {
+  font-size: 0.75rem;
+  color: var(--bark);
+}
+
+.card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 24px;
+  box-shadow: 0 2px 16px var(--shadow);
+}
+.row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+  margin-bottom: 22px;
+}
+.row-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+  margin-bottom: 22px;
+}
+.row-full { margin-bottom: 22px; }
+
+.sec-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--sand);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.chart-wrap canvas { max-height: 260px; }
+.chart-wrap-md canvas { max-height: 300px; }
+.chart-wrap-lg canvas { max-height: 380px; }
+
+.insights {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 22px;
+}
+.insight {
+  background: linear-gradient(135deg, var(--ink) 0%, var(--ink-mid) 100%);
+  color: #fff;
+  border-radius: 12px;
+  padding: 18px 20px;
+}
+.insight-label {
+  font-size: 0.72rem;
+  color: var(--gold-lt);
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+.insight-val {
+  font-size: 1.25rem;
+  font-weight: 900;
+  line-height: 1.2;
+}
+.insight-sub {
+  font-size: 0.73rem;
+  color: #aaa;
+  margin-top: 4px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+thead th {
+  background: var(--sand);
+  color: var(--ink-mid);
+  font-weight: 700;
+  padding: 9px 12px;
+  text-align: right;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+tbody tr:nth-child(even) { background: #f6f9f4; }
+tbody tr:hover { background: #e8f0e6; }
+tbody td {
+  padding: 9px 12px;
+  border-bottom: 1px solid #e8f0e6;
+}
+
+.rank-badge {
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 22px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #fff;
+}
+.r1 { background: #C9962A; }
+.r2 { background: #9E9E9E; }
+.r3 { background: #7A5230; }
+.rn { background: #ddd; color: var(--ink); }
+
+.bar-wrap {
+  background: #eee;
+  border-radius: 4px;
+  height: 7px;
+  overflow: hidden;
+  width: 70px;
+}
+.bar {
+  height: 7px;
+  border-radius: 4px;
+}
+
+.q-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #fff;
+}
+.badge-ex { background: var(--ink-mid); }
+.badge-raw { background: var(--gold-dk); color: var(--ink); }
+.badge-good { background: var(--good); }
+.badge-warn { background: var(--warn); }
+.badge-bad { background: var(--bad); }
+
+.matrix-table th {
+  background: var(--ink);
+  color: #fff;
+}
+.matrix-table th:first-child {
+  background: var(--ink-mid);
+}
+.matrix-table .total-row td {
+  background: #e8f0e6;
+  font-weight: 700;
+}
+.heat-cell {
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.82rem;
+}
+
+.chart-legend-custom {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+  justify-content: center;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+}
+.legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.tier-card {
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 10px;
+  border-right: 5px solid transparent;
+}
+.tier-good { background: #e8f5e9; border-right-color: var(--good); }
+.tier-warn { background: #fff3e0; border-right-color: var(--warn); }
+.tier-bad { background: #ffebee; border-right-color: var(--bad); }
+
+.country-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.country-pill {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  background: var(--sand);
+}
+.c-flag { font-size: 1.5rem; }
+.c-name { font-weight: 700; font-size: 0.88rem; }
+.c-qty { font-size: 0.75rem; color: var(--bark); }
+.c-pct {
+  font-weight: 900;
+  font-size: 1rem;
+  color: var(--gold-dk);
+  margin-right: auto;
+}
+
+footer {
+  text-align: center;
+  padding: 20px;
+  color: #aaa;
+  font-size: 0.75rem;
+  border-top: 1px solid var(--sand);
+  margin-top: 8px;
+}
+
+/* ======================================================
+   الصفحة الرئيسية (الملف الأول) - Landing Page
+   ====================================================== */
+.landing-wrap {
+  text-align: center;
+  width: 90%;
+  max-width: 1000px;
+  margin: 40px auto 20px;
+}
+.landing-wrap h1 {
+  font-size: 44px;
+  margin: 0;
+}
+.landing-wrap .sub {
+  opacity: .9;
+  margin: 12px 0 40px;
+}
+.landing-cards {
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.landing-card {
+  background: rgba(255, 255, 255, .12);
+  backdrop-filter: blur(10px);
+  padding: 35px;
+  border-radius: 20px;
+  width: 320px;
+  cursor: pointer;
+  transition: .3s;
+  border: 1px solid rgba(255, 255, 255, .2);
+}
+.landing-card:hover {
+  transform: translateY(-10px) scale(1.03);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, .3);
+}
+.landing-card .icon { font-size: 64px; }
+.landing-card .title {
+  font-size: 30px;
+  font-weight: bold;
+  margin: 15px 0;
+}
+.landing-card .desc { opacity: .9; }
+.landing-card .btn {
+  margin-top: 25px;
+  background: #c9962a;
+  color: #173b24;
+  padding: 12px;
+  border-radius: 30px;
+  font-weight: bold;
+}
+
+/* ======================================================
+   أنماط إضافية خاصة بالملف الثالث (المبيعات)
+   ====================================================== */
+.prod-section { margin-bottom: 20px; }
+.prod-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #fff;
+}
+.prod-ph-premium { background: var(--premium); }
+.prod-ph-delight { background: var(--delight); }
+.prod-ph-classic { background: var(--classic); }
+.prod-ph-g4 { background: var(--g4); }
+.prod-ph-golden { background: #8A650C; }
+
+/* أنماط المصفوفة للمبيعات */
+.matrix-table .total-col {
+  background: #f5edd8;
+  font-weight: 700;
+}
+
+/* ======================================================
+   استجابة للشاشات الصغيرة
+   ====================================================== */
+@media (max-width: 768px) {
+  header { padding: 20px; flex-direction: column; text-align: center; }
+  .header-right { align-items: center; }
+  .nav-tabs { padding: 0 10px; justify-content: center; }
+  .tab-btn { padding: 10px 14px; font-size: 0.75rem; }
+  .page { padding: 16px; }
+  .kpi-strip { grid-template-columns: 1fr 1fr; }
+  .row-2 { grid-template-columns: 1fr; }
+  .row-3 { grid-template-columns: 1fr; }
+  .insights { grid-template-columns: 1fr 1fr; }
+  .landing-cards { flex-direction: column; align-items: center; }
+  .landing-card { width: 100%; max-width: 320px; }
+  .country-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     HEADER المشترك
+     ============================================================ -->
+<header>
+  <div class="header-text">
+    <h1>🌴 Egypt Palm</h1>
+    <p>موسم 2025</p>
+  </div>
+  <div class="header-right">
+    <div class="header-badge">📊 تقرير أحمد علاء</div>
+  </div>
+</header>
+
+<!-- ============================================================
+     تبويبات الملاحة الرئيسية
+     ============================================================ -->
+<nav class="nav-tabs">
+  <button class="tab-btn active" onclick="switchTab('landing', this)">🏠 الرئيسية</button>
+  <button class="tab-btn" onclick="switchTab('suppliers', this)">🤝 الموردين</button>
+  <button class="tab-btn" onclick="switchTab('sales', this)">📊 المبيعات</button>
+</nav>
+
+<!-- ============================================================
+     الصفحة 1: الرئيسية (من الملف الأول)
+     ============================================================ -->
+<div id="page-landing" class="page active">
+  <div class="landing-wrap">
+    <h1>🌴 Egypt Palm Trading</h1>
+    <div class="sub">Executive Business Intelligence Portal</div>
+    <div class="landing-cards">
+      <div class="landing-card" onclick="switchTab('suppliers', document.querySelector('.tab-btn:nth-child(2)'))">
+        <div class="icon">🤝</div>
+        <div class="title">لوحة الموردين</div>
+        <div class="desc">Supplier Quality Dashboard — تحليل جودة الموردين موسم 2025</div>
+        <div class="btn">دخول اللوحة →</div>
+      </div>
+      <div class="landing-card" onclick="switchTab('sales', document.querySelector('.tab-btn:nth-child(3)'))">
+        <div class="icon">📊</div>
+        <div class="title">لوحة المبيعات</div>
+        <div class="desc">Sales & Customer Analysis Dashboard — تحليل مبيعات التمور موسم 2025</div>
+        <div class="btn">دخول اللوحة →</div>
+      </div>
+    </div>
+    <footer style="margin-top:50px;opacity:.8;">Season 2025 • Data Analytics Department</footer>
+  </div>
+</div>
+
+<!-- ============================================================
+     الصفحة 2: تحليل الموردين (الملف الثاني)
+     ============================================================ -->
+<div id="page-suppliers" class="page">
+  <!-- التبويبات الداخلية للموردين -->
+  <nav class="nav-tabs" style="padding:0 10px;margin-bottom:20px;background:transparent;border-bottom-color:#ddd;position:relative;top:auto;box-shadow:none;">
+    <button class="tab-btn active" onclick="showSupplierTab('overview', this)">📊 نظرة عامة</button>
+    <button class="tab-btn" onclick="showSupplierTab('suppliers', this)">🤝 الموردون</button>
+    <button class="tab-btn" onclick="showSupplierTab('quality', this)">⭐ المواصفات</button>
+    <button class="tab-btn" onclick="showSupplierTab('matrix', this)">📋 المصفوفة</button>
+    <button class="tab-btn" onclick="showSupplierTab('action', this)">🎯 الخطة</button>
+  </nav>
+
+  <!-- نظرة عامة - الموردين -->
+  <div id="sup-page-overview" class="page" style="display:block;padding:0;">
+    <div class="kpi-strip">
+      <div class="kpi-card"><div class="kpi-icon">⚖️</div><div class="kpi-label">إجمالي الكميات</div><div class="kpi-value" id="supTotal">485,277</div><div class="kpi-sub">كيلوجرام — الموسم كله</div></div>
+      <div class="kpi-card"><div class="kpi-icon">🌿</div><div class="kpi-label">جودة عالية</div><div class="kpi-value" id="supHQ">72.4%</div><div class="kpi-sub">351,407 كجم Premium + Delight</div></div>
+      <div class="kpi-card"><div class="kpi-icon">🤝</div><div class="kpi-label">عدد الموردين</div><div class="kpi-value">12</div><div class="kpi-sub">10 EX + 2 موردين عاديين</div></div>
+      <div class="kpi-card"><div class="kpi-icon">⚠️</div><div class="kpi-label">إجمالي G4</div><div class="kpi-value">70,885</div><div class="kpi-sub">كجم — 14.6% يحتاج خفض</div></div>
+    </div>
+
+    <div class="insights">
+      <div class="insight"><div class="insight-label">🏆 أعلى جودة (EX)</div><div class="insight-val">Segam1_EX</div><div class="insight-sub">100% Premium — النموذج المثالي</div></div>
+      <div class="insight"><div class="insight-label">📦 أكبر كمية</div><div class="insight-val">Raw_1</div><div class="insight-sub">172,327 كجم — 35.5% من الإجمالي</div></div>
+      <div class="insight"><div class="insight-label">👑 أكتر بريميوم</div><div class="insight-val">Raw_1</div><div class="insight-sub">87,130 كجم — 44.4% من Premium</div></div>
+      <div class="insight"><div class="insight-label">🔴 تدخل عاجل</div><div class="insight-val">Lehaa_EX</div><div class="insight-sub">90.1% جودة منخفضة — 54K كجم</div></div>
+    </div>
+
+    <div class="row-2">
+      <div class="card">
+        <div class="sec-title"><span class="dot" style="background:var(--gold)"></span>الكميات لكل مورد (كجم)</div>
+        <div class="chart-wrap"><canvas id="supQtyChart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="sec-title"><span class="dot" style="background:var(--green)"></span>توزيع الجودة الكلية</div>
+        <div class="chart-wrap" style="display:flex;justify-content:center;"><canvas id="supQualityDonut" style="max-width:280px;"></canvas></div>
+      </div>
+    </div>
+
+    <div class="row-2">
+      <div class="card">
+        <div class="sec-title"><span class="dot" style="background:var(--sky)"></span>مقارنة EX مقابل عادي</div>
+        <div class="chart-wrap-md"><canvas id="supExVsRawChart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="sec-title"><span class="dot" style="background:var(--bad)"></span>نسبة الجودة العالية لكل مورد</div>
+        <div class="chart-wrap-md"><canvas id="supHqPctChart"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- الموردون - تفاصيل -->
+  <div id="sup-page-suppliers" class="page" style="display:none;padding:0;">
+    <div class="insights" style="grid-template-columns:repeat(3,1fr);">
+      <div class="insight"><div class="insight-label">🥇 أعلى جودة</div><div class="insight-val">Segam1_EX</div><div class="insight-sub">100% Premium — 10,080 كجم</div></div>
+      <div class="insight"><div class="insight-label">🥈 ثاني أعلى جودة</div><div class="insight-val">Segam2_EX</div><div class="insight-sub">79.7% جودة عالية — 69,000 كجم</div></div>
+      <div class="insight"><div class="insight-label">🔴 أضعف أداء</div><div class="insight-val">Lehaa_EX</div><div class="insight-sub">9.9% جودة عالية — 54,090 كجم</div></div>
+    </div>
+    <div class="row-2">
+      <div class="card">
+        <div class="sec-title"><span class="dot" style="background:var(--gold)"></span>تصنيف الموردين</div>
+        <table>
+          <thead><tr><th>#</th><th>المورد</th><th>النوع</th><th>الكمية (كجم)</th><th>الحصة</th><th>جودة عالية%</th><th>تقييم</th></tr></thead>
+          <tbody id="supTable"></tbody>
+        </table>
+      </div>
+      <div class="card">
+        <div class="sec-title"><span class="dot" style="background:var(--sky)"></span>جودة عالية مقابل منخفضة</div>
+        <div id="supRatioCards" style="display:flex;flex-direction:column;gap:10px;max-height:480px;overflow-y:auto;"></div>
+      </div>
+    </div>
+    <div class="card row-full">
+      <div class="sec-title"><span class="dot" style="background:var(--green)"></span>توزيع المواصفات لكل مورد — بالكميات (كجم)</div>
+      <div class="chart-wrap-lg"><canvas id="supStackedChart"></canvas></div>
+      <div class="chart-legend-custom" id="supStackedLegend"></div>
+    </div>
+    <div class="card row-full">
+      <div class="sec-title"><span class="dot" style="background:var(--sky)"></span>توزيع المواصفات لكل مورد — بالنسب %</div>
+      <div class="chart-wrap-lg"><canvas id="supPctChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- المواصفات - الموردين -->
+  <div id="sup-page-quality" class="page" style="display:none;padding:0;">
+    <div class="insights" style="grid-template-columns:repeat(3,1fr);">
+      <div class="insight"><div class="insight-label">👑 بطل Premium</div><div class="insight-val">Raw_1</div><div class="insight-sub">87,130 كجم — 44.4% من Premium الكلي</div></div>
+      <div class="insight"><div class="insight-label">👑 بطل Delight</div><div class="insight-val">Raw_1</div><div class="insight-sub">39,326 كجم — 33.9% من Delight الكلي</div></div>
+      <div class="insight"><div class="insight-label">🔴 مصدر G4 الأكبر</div><div class="insight-val">Lehaa_EX</div><div class="insight-sub">32,548 كجم — 45.9% من G4 الكلي</div></div>
+    </div>
+    <div class="row-2">
+      <div class="card"><div class="sec-title"><span class="dot" style="background:var(--premium)"></span>Premium — 196,320 كجم</div><div class="chart-wrap-md"><canvas id="supPremiumChart"></canvas></div></div>
+      <div class="card"><div class="sec-title"><span class="dot" style="background:var(--delight)"></span>Delight — 115,851 كجم</div><div class="chart-wrap-md"><canvas id="supDelightChart"></canvas></div></div>
+    </div>
+    <div class="row-3">
+      <div class="card"><div class="sec-title"><span class="dot" style="background:var(--classic)"></span>Classic — 63,006 كجم</div><div class="chart-wrap"><canvas id="supClassicChart"></canvas></div></div>
+      <div class="card"><div class="sec-title"><span class="dot" style="background:var(--g4)"></span>G4 — 70,885 كجم ⚠️</div><div class="chart-wrap"><canvas id="supG4Chart"></canvas></div></div>
+      <div class="card"><div class="sec-title"><span class="dot" style="background:var(--golden)"></span>Golden Crown — 28,995 كجم</div><div class="chart-wrap"><canvas id="supGcChart"></canvas></div></div>
+    </div>
+    <div class="card row-full">
+      <div class="sec-title"><span class="dot" style="background:var(--gold-dk)"></span>مقارنة حصة كل مورد في كل مواصفة</div>
+      <div class="chart-wrap-lg"><canvas id="supSpecShareChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- المصفوفة - الموردين -->
+  <div id="sup-page-matrix" class="page" style="display:none;padding:0;">
+    <div style="margin-bottom:16px;padding:16px 20px;background:#fff;border-radius:12px;box-shadow:0 2px 8px var(--shadow);font-size:0.85rem;color:var(--ink-mid);">
+      💡 <strong>الجدول أدناه يوضح كمية كل مورد من كل مواصفة جودة بالكيلوجرام</strong>
+    </div>
+    <div class="card row-full">
+      <div class="sec-title"><span class="dot" style="background:var(--gold)"></span>مصفوفة الموردين × المواصفات (كجم)</div>
+      <div style="overflow-x:auto;"><table class="matrix-table" id="supQualityMatrix"></table></div>
+    </div>
+    <div class="card row-full">
+      <div class="sec-title"><span class="dot" style="background:var(--sky)"></span>مصفوفة الموردين × المواصفات (%)</div>
+      <div style="overflow-x:auto;"><table class="matrix-table" id="supPctMatrix"></table></div>
+    </div>
+  </div>
+
+  <!-- خطة العمل - الموردين -->
+  <div id="sup-page-action" class="page" style="display:none;padding:0;">
+    <div class="insights" style="grid-template-columns:repeat(3,1fr);">
+      <div class="insight"><div class="insight-label">✅ الوضع الحالي</div><div class="insight-val">72.4% جودة</div><div class="insight-sub">7 من 10 موردين EX أداؤهم مقبول</div></div>
+      <div class="insight"><div class="insight-label">🎯 الهدف 2026</div><div class="insight-val">فوق 80%</div><div class="insight-sub">رفع جودة عالية لـ +80% من الإجمالي</div></div>
+      <div class="insight"><div class="insight-label">🔑 المفتاح</div><div class="insight-val">Lehaa + Cap</div><div class="insight-sub">معالجة Lehaa تحل نصف مشكلة G4</div></div>
+    </div>
+    <div id="supTierCards" class="row-full"></div>
+    <div class="row-2">
+      <div class="card"><div class="sec-title"><span class="dot" style="background:var(--bad)"></span>توصيات P1 — فورية</div><div id="supP1Actions" style="display:flex;flex-direction:column;gap:12px;"></div></div>
+      <div class="card"><div class="sec-title"><span class="dot" style="background:var(--warn)"></span>توصيات P2 — قصيرة المدى</div><div id="supP2Actions" style="display:flex;flex-direction:column;gap:12px;"></div></div>
+    </div>
+    <div class="card row-full">
+      <div class="sec-title"><span class="dot" style="background:var(--good)"></span>توصيات P3 — بعيدة المدى</div>
+      <div id="supP3Actions" style="display:flex;flex-direction:column;gap:12px;"></div>
+    </div>
+    <div class="card row-full">
+      <div class="sec-title"><span class="dot" style="background:var(--gold-dk)"></span>تحليل المخاطر</div>
+      <div id="supRiskSection" style="display:flex;flex-direction:column;gap:12px;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     الصفحة 3: تحليل المبيعات (الملف الثالث)
+     ============================================================ -->
+<div id="page-sales" class="page">
+  <!-- التبويبات الداخلية للمبيعات -->
+  <nav class="nav-tabs" style="padding:0 10px;margin-bottom:20px;background:transparent;border-bottom-color:#ddd;position:relative;top:auto;box-shadow:none;">
+    <button class="tab-btn active" onclick="showSalesTab('overview', this)">📊 نظرة عامة</button>
+    <button class="tab-btn" onclick="showSalesTab('customers', this)">🤝 العملاء</button>
+    <button class="tab-btn" onclick="showSalesTab('quality', this)">⭐ الجودة والأصناف</button>
+    <button class="tab-btn" onclick="showSalesTab('matrix', this)">📋 المصفوفة</button>
+    <button class="tab-btn" onclick="showSalesTab('trends', this)">📈 الاتجاهات</button>
+  </nav>
+
+  <!-- نظرة عامة - المبيعات -->
+  <div id="sales-page-overview" class="page" style="display:block;padding:0;">
+    <div class="kpi-strip">
+      <div class="kpi-card"><div class="kpi-icon">⚖️</div><div class="kpi-label">إجمالي الكميات</div><div class="kpi-value">484,459</div><div class="kpi-sub">كيلو جرام — الموسم كله</div></div>
+      <div class="kpi-card"><div class="kpi-icon">📋</div><div class="kpi-label">عدد الفواتير</div><div class="kpi-value">17</div><div class="kpi-sub">فاتورة خلال 6 أشهر</div></div>
+      <div class="kpi-card"><div class="kpi-icon">🤝</div><div class="kpi-label">عدد العملاء</div><div class="kpi-value">7</div><div class="kpi-sub">في 4 دول مختلفة</div></div>
+      <div class="kpi-card"><div class="kpi-icon">🌿</div><div class="kpi-label">تنوع المنتجات</div><div class="kpi-value">25</div><div class="kpi-sub">صنف تمر مختلف</div></div>
+    </div>
+    <div class="insights">
+      <div class="insight"><div class="insight-label">🥇 أكبر عميل</div><div class="insight-val">Omar Anadoul</div><div class="insight-sub">254,000 كجم — 52.4%</div></div>
+      <div class="insight"><div class="insight-label">📈 ذروة الموسم</div><div class="insight-val">أكتوبر 2025</div><div class="insight-sub">165,305 كجم</div></div>
+      <div class="insight"><div class="insight-label">🌟 أكثر صنف مبيعاً</div><div class="insight-val">Premium Large</div><div class="insight-sub">92,031 كجم — 19%</div></div>
+      <div class="insight"><div class="insight-label">🌍 أكبر سوق</div><div class="insight-val">تركيا</div><div class="insight-sub">388,580 كجم — 80.2%</div></div>
+    </div>
+    <div class="row-2">
+      <div class="card"><div class="sec-title"><span class="dot" style="background:var(--gold)"></span>الكميات الشهرية (كجم)</div><div class="chart-wrap"><canvas id="salesMonthlyChart"></canvas></div></div>
+      <div class="card"><div class="sec-title"><span class="dot" style="background:var(--green)"></span>توزيع الجودة</div><div class="chart-wrap" style="display:flex;justify-content:center;"><canvas id="salesQualityDonut" style="max-width:280px;"></canvas></div></div>
+    </div>
+    <div class="row-2">
+      <div class="card"><div class="sec-title"><span class="dot" style="background:var(--sky)"></span>الحصص السوقية — العملاء</div><div class="chart-wrap"><canvas id="salesCustShareChart"></canvas></div></div>
+      <div class="card"><div class="sec-title"><span class="dot" style="background:var(--bark)"></span>التوزيع الجغرافي</div><div class="country-grid" id="salesCountryGrid"></div><div class="chart-wrap"><canvas id="salesCountryChart"></canvas></div></div>
+    </div>
+  </div>
+
+  <!-- العملاء - المبيعات -->
+  <div id="sales-page-customers" class="page" style="display:none;padding:0;">
+    <div class="insights" style="grid-template-columns:repeat(3,1fr);">
+      <div class="insight"><div class="insight-label">🏆 المركز الأول</div><div class="insight-val">Omar Anadoul</div><div class="insight-sub">254,000 كجم — 6 فواتير</div></div>
+      <div class="insight"><div class="insight-label">🥈 المركز الثاني</div><div class="insight-val">Ozgen</div><div class="insight-sub">134,580 كجم — 4 فواتير</div></div>
+      <div class="insight"><div class="insight-label">🥉 المركز الثالث</div><div class="insight-val">Datco</div><div class="insight-sub">45,000 كجم — 2 فواتير</div></div>
+    </div>
+    <div class="row-2">
+      <div class="card"><div class="sec-title"><span class="dot" style="background:var(--gold)"></span>تصنيف العملاء الكامل</div><table><thead><tr><th>#</th><th>العميل</th><th>الكمية (كجم)</th><th>الحصة</th><th>فواتير</th><th>متوسط/فاتورة</th></tr></thead><tbody id="salesCustTable"></tbody></table></div>
+      <div class="card"><div class="sec-title"><span class="dot" style="background:var(--sky)"></span>مقارنة الكميات</div><div class="chart-wrap-md"><canvas id="salesCustBarChart"></canvas></div></div>
+    </div>
+    <div class="card row-full"><div class="sec-title"><span class="dot" style="background:var(--green)"></span>توزيع الجودة لكل عميل (كجم)</div><div class="chart-wrap-lg"><canvas id="salesCustStackedChart"></canvas></div><div class="chart-legend-custom" id="salesStackedLegend"></div></div>
+    <div class="card row-full"><div class="sec-title"><span class="dot" style="background:var(--sky)"></span>توزيع الجودة لكل عميل (%)</div><div class="chart-wrap-lg"><canvas id="salesCustPctChart"></canvas></div></div>
+    <div class="card row-full"><div class="sec-title"><span class="dot" style="background:var(--gold-dk)"></span>نسبة الجودة العالية مقابل المنخفضة</div>
+      <div id="salesRatioCards" style="display:flex;flex-direction:column;gap:14px;"></div>
+    </div>
+  </div>
+
+  <!-- الجودة والأصناف - المبيعات -->
+  <div id="sales-page-quality" class="page" style="display:none;padding:0;">
+    <div class="insights" style="grid-template-columns:repeat(4,1fr);">
+      <div class="insight"><div class="insight-label">🥇 PREMIUM</div><div class="insight-val">194,257 كجم</div><div class="insight-sub">40.1% من الإجمالي</div></div>
+      <div class="insight"><div class="insight-label">🥈 DELIGHT</div><div class="insight-val">115,094 كجم</div><div class="insight-sub">23.8% من الإجمالي</div></div>
+      <div class="insight"><div class="insight-label">🟣 G4 MIX</div><div class="insight-val">69,431 كجم</div><div class="insight-sub">14.3% من الإجمالي</div></div>
+      <div class="insight"><div class="insight-label">🟤 CLASSIC</div><div class="insight-val">62,068 كجم</div><div class="insight-sub">12.8% من الإجمالي</div></div>
+    </div>
+    <div class="row-2">
+      <div class="card"><div class="sec-title"><span class="dot" style="background:var(--premium)"></span>PREMIUM — 194,257 كجم</div><div class="chart-wrap-md"><canvas id="salesPremiumChart"></canvas></div></div>
+      <div class="card"><div class="sec-title"><span class="dot" style="background:var(--delight)"></span>DELIGHT — 115,094 كجم</div><div class="chart-wrap-md"><canvas id="salesDelightChart"></canvas></div></div>
+    </div>
+    <div class="row-3">
+      <div class="card"><div class="sec-title"><span class="dot" style="background:var(--classic)"></span>CLASSIC — 62,068 كجم</div><div class="chart-wrap"><canvas id="salesClassicChart"></canvas></div></div>
+      <div class="card"><div class="sec-title"><span class="dot" style="background:var(--g4)"></span>G4 MIX — 69,431 كجم</div><div class="chart-wrap"><canvas id="salesG4Chart"></canvas></div></div>
+      <div class="card"><div class="sec-title"><span class="dot" style="background:var(--golden)"></span>GOLDEN CROWEN — 34,511 كجم</div><div class="chart-wrap"><canvas id="salesGoldenChart"></canvas></div></div>
+    </div>
+    <div class="card row-full"><div class="sec-title"><span class="dot" style="background:var(--gold-dk)"></span>أعلى 10 منتجات</div><div class="chart-wrap-lg"><canvas id="salesTop10Chart"></canvas></div></div>
+  </div>
+
+  <!-- المصفوفة - المبيعات -->
+  <div id="sales-page-matrix" class="page" style="display:none;padding:0;">
+    <div style="margin-bottom:16px;padding:16px 20px;background:#fff;border-radius:12px;box-shadow:0 2px 8px var(--shadow);font-size:0.85rem;color:var(--ink-mid);">
+      💡 <strong>الجدول أدناه يوضح كمية كل عميل من كل فئة جودة وكل منتج بالكيلوجرام</strong>
+    </div>
+    <div class="card row-full"><div class="sec-title"><span class="dot" style="background:var(--gold)"></span>مصفوفة العملاء × فئات الجودة (كجم)</div>
+      <div style="overflow-x:auto;"><table class="matrix-table" id="salesQualityMatrix"></table></div>
+    </div>
+    <div class="card row-full"><div class="sec-title"><span class="dot" style="background:var(--sky)"></span>مصفوفة العملاء × المنتجات التفصيلية (كجم)</div>
+      <div style="overflow-x:auto;"><table class="matrix-table" id="salesProductMatrix"></table></div>
+    </div>
+  </div>
+
+  <!-- الاتجاهات - المبيعات -->
+  <div id="sales-page-trends" class="page" style="display:none;padding:0;">
+    <div class="insights" style="grid-template-columns:repeat(3,1fr);">
+      <div class="insight"><div class="insight-label">📈 أفضل شهر</div><div class="insight-val">أكتوبر 2025</div><div class="insight-sub">165,305 كجم</div></div>
+      <div class="insight"><div class="insight-label">📉 أضعف شهر</div><div class="insight-val">فبراير 2026</div><div class="insight-sub">12,384 كجم</div></div>
+      <div class="insight"><div class="insight-label">📊 متوسط شهري</div><div class="insight-val">80,743 كجم</div><div class="insight-sub">على مدار 6 أشهر</div></div>
+    </div>
+    <div class="card row-full"><div class="sec-title"><span class="dot" style="background:var(--gold)"></span>الاتجاه الشهري لكل عميل</div><div class="chart-wrap-lg"><canvas id="salesTrendChart"></canvas></div></div>
+    <div class="row-2">
+      <div class="card"><div class="sec-title"><span class="dot" style="background:var(--green)"></span>نشاط كل عميل شهرياً</div>
+        <div style="overflow-x:auto;"><table id="salesMonthlyTable"></table></div>
+      </div>
+      <div class="card"><div class="sec-title"><span class="dot" style="background:var(--sky)"></span>تحليل المخاطر</div>
+        <div id="salesRiskSection" style="display:flex;flex-direction:column;gap:14px;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     FOOTER المشترك
+     ============================================================ -->
+<footer>🌴 Egypt Palm — موسم 2025 &nbsp;|&nbsp; تم الإعداد بواسطة أحمد علاء &nbsp;|&nbsp;</footer>
+
+<!-- ============================================================
+     JavaScript - كل الأكواد في مكان واحد مع حل التعارضات
+     ============================================================ -->
+<script>
+// =============================================================
+// 1. التنقل الرئيسي بين التبويبات الكبيرة (الرئيسية - الموردين - المبيعات)
+// =============================================================
+function switchTab(tabId, btn) {
+  // إخفاء كل الصفحات الرئيسية
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  // إظهار الصفحة المطلوبة
+  const target = document.getElementById('page-' + tabId);
+  if (target) target.classList.add('active');
+  // تحديث حالة الأزرار
+  document.querySelectorAll('.nav-tabs > .tab-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  // إعادة رسم الرسوم البيانية بعد التبديل (تحديث الحجم)
+  setTimeout(() => {
+    Chart.instances.forEach(chart => chart.resize());
+  }, 100);
+}
+
+// =============================================================
+// 2. التنقل الداخلي للموردين
+// =============================================================
+function showSupplierTab(tabId, btn) {
+  const prefix = 'sup-page-';
+  // إخفاء كل صفحات الموردين الداخلية
+  document.querySelectorAll('#page-suppliers .page').forEach(p => p.style.display = 'none');
+  // إظهار المطلوبة
+  const target = document.getElementById(prefix + tabId);
+  if (target) target.style.display = 'block';
+  // تحديث الأزرار
+  const parent = btn.closest('.nav-tabs');
+  parent.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  setTimeout(() => { Chart.instances.forEach(chart => chart.resize()); }, 100);
+}
+
+// =============================================================
+// 3. التنقل الداخلي للمبيعات
+// =============================================================
+function showSalesTab(tabId, btn) {
+  const prefix = 'sales-page-';
+  document.querySelectorAll('#page-sales .page').forEach(p => p.style.display = 'none');
+  const target = document.getElementById(prefix + tabId);
+  if (target) target.style.display = 'block';
+  const parent = btn.closest('.nav-tabs');
+  parent.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  setTimeout(() => { Chart.instances.forEach(chart => chart.resize()); }, 100);
+}
+
+// =============================================================
+// 4. بيانات الموردين
+// =============================================================
+const SUP_TOTAL = 485277;
+const supFmt = n => Math.round(n).toLocaleString('en');
+const supPct = (n, t) => ((n / (t || SUP_TOTAL)) * 100).toFixed(1) + '%';
+
+const supData = [
+  { name: 'Raw_1', ex: false, qty: 172327, hq: 73.4, premium: 87130, delight: 39326, classic: 34965, g4: 3791, gc: 4822, other: 2293 },
+  { name: 'Segam2_EX', ex: true, qty: 69000, hq: 79.7, premium: 37000, delight: 18000, classic: 0, g4: 14007, gc: 0, other: 0 },
+  { name: 'Lehaa_EX', ex: true, qty: 54090, hq: 9.9, premium: 220, delight: 5140, classic: 8871, g4: 32548, gc: 7252, other: 59 },
+  { name: 'El_Maha_EX', ex: true, qty: 34350, hq: 55.5, premium: 7900, delight: 11130, classic: 6252, g4: 4980, gc: 3917, other: 171 },
+  { name: 'Shahd_EX', ex: true, qty: 22090, hq: 66.5, premium: 8060, delight: 6625, classic: 1281, g4: 1612, gc: 3270, other: 1242 },
+  { name: 'PalmEgypt_EX', ex: true, qty: 15125, hq: 73.6, premium: 3132, delight: 8001, classic: 0, g4: 3992, gc: 0, other: 0 },
+  { name: 'Raw_2', ex: false, qty: 91295, hq: 64.1, premium: 35905, delight: 22650, classic: 10952, g4: 7937, gc: 7941, other: 5910 },
+  { name: 'Segam1_EX', ex: true, qty: 10080, hq: 100, premium: 10080, delight: 0, classic: 0, g4: 0, gc: 0, other: 0 },
+  { name: 'El_Gewshy_EX', ex: true, qty: 8360, hq: 66.1, premium: 2950, delight: 2582, classic: 343, g4: 1613, gc: 594, other: 278 },
+  { name: 'Strick_EX', ex: true, qty: 4505, hq: 72.8, premium: 2130, delight: 1148, classic: 194, g4: 153, gc: 757, other: 123 },
+  { name: 'El_Maleka_EX', ex: true, qty: 2130, hq: 79.6, premium: 965, delight: 731, classic: 115, g4: 226, gc: 85, other: 8 },
+  { name: 'El_Gendy_EX', ex: true, qty: 1925, hq: 71.4, premium: 845, delight: 530, classic: 110, g4: 25, gc: 335, other: 80 },
+];
+
+const supByQty = [...supData].sort((a, b) => b.qty - a.qty);
+const supByHQ = [...supData].sort((a, b) => b.hq - a.hq);
+const supNames = supByQty.map(s => s.name);
+const supHQNames = supByHQ.map(s => s.name);
+
+const supQualKeys = ['premium', 'delight', 'classic', 'g4', 'gc', 'other'];
+const supQualLabels = { premium: 'Premium', delight: 'Delight', classic: 'Classic', g4: 'G4', gc: 'Golden Crown', other: 'أخرى' };
+const supPalette = ['#1B4F72', '#2D6A4F', '#7A5230', '#B71C1C', '#8E44AD', '#9E9E9E'];
+
+const supSpecTotals = {};
+supQualKeys.forEach(k => { supSpecTotals[k] = supData.reduce((s, x) => s + x[k], 0); });
+
+// =============================================================
+// 5. بيانات المبيعات
+// =============================================================
+const SALES_TOTAL = 484459;
+const salesFmt = n => Math.round(n).toLocaleString('en');
+const salesPct = n => ((n / SALES_TOTAL) * 100).toFixed(1) + '%';
+
+const salesCustomers = [
+  { name: 'Omar Anadoul', qty: 254000, inv: 6 },
+  { name: 'Ozgen', qty: 134580, inv: 4 },
+  { name: 'Datco', qty: 45000, inv: 2 },
+  { name: 'Smart Farms LTD', qty: 29689, inv: 2 },
+  { name: 'Palm Egypt', qty: 12305, inv: 1 },
+  { name: 'Agri Tech', qty: 6985, inv: 1 },
+  { name: 'Fawzy El-Dghedy', qty: 1900, inv: 1 },
+];
+
+const salesMonths = ['سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر', 'يناير', 'فبراير'];
+const salesMonthlyTotal = [84000, 165305, 122885, 76885, 23000, 12384];
+
+const salesCustMonthly = {
+  'Omar Anadoul': [40000, 148000, 66000, 0, 0, 0],
+  'Ozgen': [44000, 0, 44580, 23000, 23000, 0],
+  'Datco': [0, 0, 0, 45000, 0, 0],
+  'Smart Farms LTD': [0, 17305, 0, 0, 0, 12384],
+  'Palm Egypt': [0, 0, 12305, 0, 0, 0],
+  'Agri Tech': [0, 0, 0, 6985, 0, 0],
+  'Fawzy El-Dghedy': [0, 0, 0, 1900, 0, 0],
+};
+
+const salesCustQuality = {
+  'Omar Anadoul': { PREMIUM: 124950, DELIGHT: 66650, CLASSIC: 28000, 'G4 MIX': 18100, 'GOLDEN CROWEN': 10800, 'BABY SMALL': 3570, 'BON BON': 1930 },
+  'Ozgen': { PREMIUM: 40030, DELIGHT: 29250, CLASSIC: 25950, 'G4 MIX': 14400, 'GOLDEN CROWEN': 23150, 'BABY SMALL': 550, 'BON BON': 1250 },
+  'Datco': { PREMIUM: 5500, DELIGHT: 4400, CLASSIC: 1100, 'G4 MIX': 34000, 'GOLDEN CROWEN': 0, 'BABY SMALL': 0, 'BON BON': 0 },
+  'Smart Farms LTD': { PREMIUM: 11472, DELIGHT: 12444, CLASSIC: 1898, 'G4 MIX': 2931, 'GOLDEN CROWEN': 561, 'BABY SMALL': 170, 'BON BON': 215 },
+  'Palm Egypt': { PREMIUM: 12305, DELIGHT: 0, CLASSIC: 0, 'G4 MIX': 0, 'GOLDEN CROWEN': 0, 'BABY SMALL': 0, 'BON BON': 0 },
+  'Agri Tech': { PREMIUM: 0, DELIGHT: 1150, CLASSIC: 5120, 'G4 MIX': 0, 'GOLDEN CROWEN': 0, 'BABY SMALL': 0, 'BON BON': 715 },
+  'Fawzy El-Dghedy': { PREMIUM: 0, DELIGHT: 1200, CLASSIC: 0, 'G4 MIX': 0, 'GOLDEN CROWEN': 0, 'BABY SMALL': 0, 'BON BON': 0, JUICY: 700 },
+};
+
+const salesQualityTotals = { PREMIUM: 194257, DELIGHT: 115094, CLASSIC: 62068, 'G4 MIX': 69431, 'GOLDEN CROWEN': 34511, 'BABY SMALL': 4290, 'BON BON': 4110, JUICY: 700 };
+const salesQualityColors = { PREMIUM: '#1B4F72', DELIGHT: '#2D6A4F', CLASSIC: '#7A5230', 'G4 MIX': '#8E44AD', 'GOLDEN CROWEN': '#C9962A', 'BABY SMALL': '#E67E22', 'BON BON': '#C0392B', JUICY: '#16A085' };
+
+const salesPremiumProds = [
+  ['Premium Large', 92031],
+  ['Premium Medium', 53231],
+  ['Premium Small', 29370],
+  ['Premium Jumbo', 17096],
+  ['Premium Super Jumbo', 2528]
+];
+const salesDelightProds = [
+  ['Delight Large', 54850],
+  ['Delight Medium', 26667],
+  ['Delight Small', 17274],
+  ['Delight Jumbo', 12885],
+  ['Delight Super Jumbo', 3417]
+];
+const salesClassicProds = [
+  ['Classic Large', 31451],
+  ['Classic Medium', 16786],
+  ['Classic Small', 8355],
+  ['Classic Jumbo', 4712],
+  ['Classic Super Jumbo', 764]
+];
+const salesG4Prods = [
+  ['Grade C Extra Small', 34650],
+  ['Grade C Extra Large', 27850],
+  ['Grade C Mix', 5945],
+  ['C-E.L', 986]
+];
+const salesGoldenProds = [
+  ['Golden Crowen Extra Small', 25900],
+  ['Golden Crowen Extra Large', 8050],
+  ['Golden Crowen Mix', 561]
+];
+
+const salesCustProduct = {
+  'Omar Anadoul': { 'Premium Large': 60200, 'Premium Medium': 31400, 'Premium Small': 18050, 'Delight Large': 36000, 'Delight Medium': 11500, 'Delight Jumbo': 10800, 'Classic Large': 12800, 'Classic Medium': 9800, 'Grade C Extra Small': 7300, 'Golden Crowen Extra Small': 8600, 'Premium Jumbo': 13650, 'Delight Small': 6150, 'Classic Small': 3200, 'Grade C Extra Large': 6800, 'Golden Crowen Extra Large': 2200, 'Baby Small': 3570, 'Grade C Mix': 4000, 'Bon Bon': 1930, 'Delight Super Jumbo': 2200, 'Classic Jumbo': 2200, 'Premium Super Jumbo': 1650 },
+  'Ozgen': { 'Premium Large': 16884, 'Premium Medium': 12476, 'Premium Small': 7110, 'Delight Large': 12630, 'Delight Medium': 8835, 'Classic Large': 13740, 'Classic Medium': 6485, 'Grade C Extra Small': 3850, 'Golden Crowen Extra Small': 17300, 'Golden Crowen Extra Large': 5850, 'Premium Jumbo': 2695, 'Delight Small': 6075, 'Classic Small': 2575, 'Grade C Extra Large': 10550, 'Baby Small': 550, 'Classic Super Jumbo': 750, 'Classic Jumbo': 2400, 'Delight Jumbo': 805, 'Delight Super Jumbo': 905, 'Bon Bon': 1250, 'Premium Super Jumbo': 865 },
+  'Datco': { 'Grade C Extra Small': 23500, 'Grade C Extra Large': 10500, 'Delight Medium': 3300, 'Premium Large': 3300, 'Delight Large': 1100, 'Classic Large': 1100, 'Premium Small': 1100, 'Premium Medium': 1100 },
+  'Smart Farms LTD': { 'Premium Large': 4302, 'Premium Medium': 3820, 'Delight Large': 2770, 'Delight Medium': 3032, 'Delight Small': 5049, 'Grade C Mix': 1945, 'Classic Large': 361, 'Classic Small': 910, 'Classic Medium': 501, 'Delight Jumbo': 1280, 'Golden Crowen Mix': 561, 'Baby Small': 170, 'Bon Bon': 215, 'Classic Jumbo': 112, 'Delight Super Jumbo': 312, 'Premium Small': 3110, 'Premium Jumbo': 226 },
+  'Palm Egypt': { 'Premium Large': 7345, 'Premium Medium': 4435, 'Premium Jumbo': 525 },
+  'Agri Tech': { 'Classic Large': 3450, 'Classic Small': 1670, 'Delight Large': 1150, 'Bon Bon': 715 },
+  'Fawzy El-Dghedy': { 'Delight Large': 1200, 'JUICY 1 KG': 700 },
+};
+
+const salesCustNames = salesCustomers.map(c => c.name);
+const salesPalette = ['#1B4F72', '#2D6A4F', '#C9962A', '#7A5230', '#8E44AD', '#C0392B', '#16A085'];
+
+// =============================================================
+// 6. رسم الرسوم البيانية للموردين
+// =============================================================
+Chart.defaults.font.family = "'Cairo', sans-serif";
+
+// --- موردين: الكميات ---
+new Chart(document.getElementById('supQtyChart'), {
+  type: 'bar',
+  data: {
+    labels: supByQty.map(s => s.name),
+    datasets: [{
+      label: 'الكمية (كجم)',
+      data: supByQty.map(s => s.qty),
+      backgroundColor: supByQty.map(s => s.ex ? '#2C5F2D99' : '#C9962A99'),
+      borderColor: supByQty.map(s => s.ex ? '#1A2B1A' : '#8A650C'),
+      borderWidth: 1.5,
+      borderRadius: 6
+    }]
+  },
+  options: { indexAxis: 'y', responsive: true, plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ` ${supFmt(c.raw)} كجم` } } }, scales: { x: { ticks: { callback: v => (v / 1000).toFixed(0) + 'K' }, grid: { color: '#e8f0e6' } }, y: { grid: { display: false } } } }
+});
+
+// --- موردين: Donut الجودة ---
+new Chart(document.getElementById('supQualityDonut'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Premium', 'Delight', 'Classic', 'G4', 'Golden Crown', 'أخرى'],
+    datasets: [{ data: supQualKeys.map(k => supSpecTotals[k]), backgroundColor: supPalette, borderWidth: 2, borderColor: '#fff' }]
+  },
+  options: { responsive: true, cutout: '58%', plugins: { legend: { position: 'bottom', labels: { font: { size: 10 }, padding: 8 } }, tooltip: { callbacks: { label: c => ` ${supFmt(c.raw)} كجم (${supPct(c.raw)})` } } } }
+});
+
+// --- موردين: EX vs Raw ---
+new Chart(document.getElementById('supExVsRawChart'), {
+  type: 'bar',
+  data: {
+    labels: ['الكمية الكلية', 'جودة عالية', 'جودة منخفضة'],
+    datasets: [
+      { label: 'عادي (Raw_1+Raw_2)', data: [263622, 184811, 78811], backgroundColor: '#C9962A99', borderColor: '#8A650C', borderWidth: 1.5, borderRadius: 6 },
+      { label: 'EX (10 موردين)', data: [221655, 127032, 94623], backgroundColor: '#2C5F2D99', borderColor: '#1A2B1A', borderWidth: 1.5, borderRadius: 6 },
+    ]
+  },
+  options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { font: { size: 11 } } }, tooltip: { callbacks: { label: c => ` ${c.dataset.label}: ${supFmt(c.raw)} كجم` } } }, scales: { y: { ticks: { callback: v => (v / 1000).toFixed(0) + 'K' }, grid: { color: '#e8f0e6' } }, x: { grid: { display: false } } } }
+});
+
+// --- موردين: نسبة الجودة العالية ---
+new Chart(document.getElementById('supHqPctChart'), {
+  type: 'bar',
+  data: {
+    labels: supHQNames,
+    datasets: [{
+      label: 'جودة عالية %',
+      data: supByHQ.map(s => s.hq),
+      backgroundColor: supByHQ.map(s => s.hq >= 75 ? '#2E7D3299' : s.hq >= 55 ? '#E6510099' : '#B71C1C99'),
+      borderColor: supByHQ.map(s => s.hq >= 75 ? '#2E7D32' : s.hq >= 55 ? '#E65100' : '#B71C1C'),
+      borderWidth: 1.5,
+      borderRadius: 6
+    }]
+  },
+  options: { indexAxis: 'y', responsive: true, plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ` جودة عالية: ${c.raw}%` } } }, scales: { x: { max: 100, ticks: { callback: v => v + '%' }, grid: { color: '#e8f0e6' } }, y: { grid: { display: false } } } }
+});
+
+// --- موردين: جدول التصنيف ---
+const supTbody = document.getElementById('supTable');
+const supSortedByHQ = [...supData].sort((a, b) => b.hq - a.hq);
+supSortedByHQ.forEach((s, i) => {
+  const sh = ((s.qty / SUP_TOTAL) * 100).toFixed(1);
+  const grade = s.hq >= 75 ? { l: 'ممتاز', c: '#2E7D32', bg: '#e8f5e9' } : s.hq >= 65 ? { l: 'جيد', c: '#1B4F72', bg: '#e3f2fd' } : s.hq >= 50 ? { l: 'متوسط', c: '#E65100', bg: '#fff3e0' } : { l: 'ضعيف', c: '#B71C1C', bg: '#ffebee' };
+  const rc = ['r1', 'r2', 'r3'];
+  supTbody.innerHTML += `<tr>
+    <td><span class="rank-badge ${i < 3 ? rc[i] : 'rn'}">${i + 1}</span></td>
+    <td style="font-weight:600">${s.name}</td>
+    <td><span class="q-badge ${s.ex ? 'badge-ex' : 'badge-raw'}">${s.ex ? 'EX' : 'عادي'}</span></td>
+    <td style="font-weight:700">${supFmt(s.qty)}</td>
+    <td><div style="display:flex;align-items:center;gap:8px"><div class="bar-wrap"><div class="bar" style="width:${sh}%;background:var(--ink-mid)"></div></div><span style="font-size:.8rem;font-weight:700">${sh}%</span></div></td>
+    <td style="font-weight:800;color:${grade.c}">${s.hq}%</td>
+    <td><span style="background:${grade.bg};color:${grade.c};font-size:.72rem;font-weight:700;padding:3px 10px;border-radius:20px">${grade.l}</span></td>
+  </tr>`;
+});
+
+// --- موردين: بطاقات نسبة الجودة ---
+const supRatioCards = document.getElementById('supRatioCards');
+supSortedByHQ.forEach((s) => {
+  const lo = 100 - s.hq;
+  const grade = s.hq >= 75 ? { l: 'ممتاز', c: '#2E7D32', bg: '#e8f5e9' } : s.hq >= 65 ? { l: 'جيد جداً', c: '#1B4F72', bg: '#e3f2fd' } : s.hq >= 50 ? { l: 'متوسط', c: '#E65100', bg: '#fff3e0' } : { l: 'يحتاج مراجعة', c: '#B71C1C', bg: '#ffebee' };
+  const clr = s.ex ? '#2C5F2D' : '#8A650C';
+  supRatioCards.innerHTML += `
+  <div style="background:#fff;border-radius:10px;padding:13px 16px;box-shadow:0 1px 6px rgba(0,0,0,.07);border-right:4px solid ${clr}">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;">
+      <div style="font-weight:700;font-size:.88rem">${s.name} <span style="font-size:.72rem;color:#888">${s.ex ? 'EX' : 'عادي'}</span></div>
+      <span style="background:${grade.bg};color:${grade.c};font-size:.72rem;font-weight:700;padding:3px 10px;border-radius:20px">${grade.l}</span>
+    </div>
+    <div style="display:flex;align-items:center;border-radius:6px;overflow:hidden;height:22px;margin-bottom:8px;">
+      ${s.hq > 0 ? `<div style="width:${s.hq}%;background:linear-gradient(90deg,#1B4F72,#2D6A4F);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.72rem;font-weight:700;min-width:36px">${s.hq}%</div>` : ''}
+      ${lo > 0 ? `<div style="width:${lo}%;background:linear-gradient(90deg,#8E44AD,#B71C1C);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.72rem;font-weight:700;min-width:36px">${lo.toFixed(1)}%</div>` : ''}
+    </div>
+    <div style="display:flex;gap:18px;font-size:.78rem;">
+      <div><strong style="color:#1B4F72">جودة عالية:</strong> ${supFmt(Math.round(s.qty * s.hq / 100))} كجم</div>
+      <div><strong style="color:#B71C1C">منخفضة:</strong> ${supFmt(Math.round(s.qty * lo / 100))} كجم</div>
+    </div>
+  </div>`;
+});
+
+// --- موردين: Stacked Chart ---
+new Chart(document.getElementById('supStackedChart'), {
+  type: 'bar',
+  data: {
+    labels: supNames,
+    datasets: supQualKeys.map((q, qi) => ({
+      label: supQualLabels[q],
+      data: supByQty.map(s => s[q]),
+      backgroundColor: supPalette[qi],
+      borderRadius: qi === supQualKeys.length - 1 ? 6 : 0,
+      borderSkipped: false,
+    }))
+  },
+  options: { responsive: true, plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ` ${c.dataset.label}: ${supFmt(c.raw)} كجم` } } }, scales: { x: { stacked: true, grid: { display: false } }, y: { stacked: true, ticks: { callback: v => (v / 1000).toFixed(0) + 'K' }, grid: { color: '#e8f0e6' } } } }
+});
+const supLeg = document.getElementById('supStackedLegend');
+supQualKeys.forEach((q, i) => { supLeg.innerHTML += `<div class="legend-item"><div class="legend-dot" style="background:${supPalette[i]}"></div><span>${supQualLabels[q]}</span></div>`; });
+
+// --- موردين: Pct Stacked Chart ---
+new Chart(document.getElementById('supPctChart'), {
+  type: 'bar',
+  data: {
+    labels: supNames,
+    datasets: supQualKeys.map((q, qi) => ({
+      label: supQualLabels[q],
+      data: supByQty.map(s => s.qty > 0 ? +((s[q] / s.qty * 100).toFixed(1)) : 0),
+      backgroundColor: supPalette[qi],
+      borderRadius: qi === supQualKeys.length - 1 ? 6 : 0,
+      borderSkipped: false,
+    }))
+  },
+  options: { responsive: true, plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ` ${c.dataset.label}: ${c.raw}%` } } }, scales: { x: { stacked: true, grid: { display: false } }, y: { stacked: true, max: 100, ticks: { callback: v => v + '%' }, grid: { color: '#e8f0e6' } } } }
+});
+
+// --- موردين: Mini Doughnuts للجودة ---
+function supMiniDoughnut(id, data, colors) {
+  new Chart(document.getElementById(id), {
+    type: 'doughnut',
+    data: { labels: data.map(d => d[0]), datasets: [{ data: data.map(d => d[1]), backgroundColor: colors, borderWidth: 2, borderColor: '#fff' }] },
+    options: { responsive: true, cutout: '50%', plugins: { legend: { position: 'bottom', labels: { font: { size: 9.5 }, padding: 6 } }, tooltip: { callbacks: { label: c => ` ${supFmt(c.raw)} كجم (${supPct(c.raw, data.reduce((a, x) => a + x[1], 0))})` } } } }
+  });
+}
+const supBlueShades = ['#1B4F72', '#2E86C1', '#5DADE2', '#85C1E9', '#AED6F1', '#D6EAF8', '#1A5276'];
+const supGreenShades = ['#1B5E20', '#2D6A4F', '#388E3C', '#52B788', '#A5D6A7', '#27AE60', '#1D8348'];
+const supBrownShades = ['#4E342E', '#6D4C41', '#795548', '#A1887F', '#D7CCC8'];
+const supRedShades = ['#B71C1C', '#C62828', '#D32F2F', '#E53935', '#EF9A9A'];
+const supPurpShades = ['#4A148C', '#6A1B9A', '#7B1FA2', '#8E24AA', '#AB47BC'];
+
+const supPremSups = supData.filter(s => s.premium > 0).sort((a, b) => b.premium - a.premium);
+supMiniDoughnut('supPremiumChart', supPremSups.map(s => [s.name, s.premium]), supBlueShades);
+const supDelSups = supData.filter(s => s.delight > 0).sort((a, b) => b.delight - a.delight);
+supMiniDoughnut('supDelightChart', supDelSups.map(s => [s.name, s.delight]), supGreenShades);
+const supClaSups = supData.filter(s => s.classic > 0).sort((a, b) => b.classic - a.classic);
+supMiniDoughnut('supClassicChart', supClaSups.map(s => [s.name, s.classic]), supBrownShades);
+const supG4Sups = supData.filter(s => s.g4 > 0).sort((a, b) => b.g4 - a.g4);
+supMiniDoughnut('supG4Chart', supG4Sups.map(s => [s.name, s.g4]), supRedShades);
+const supGcSups = supData.filter(s => s.gc > 0).sort((a, b) => b.gc - a.gc);
+supMiniDoughnut('supGcChart', supGcSups.map(s => [s.name, s.gc]), supPurpShades);
+
+// --- موردين: حصة المواصفات ---
+new Chart(document.getElementById('supSpecShareChart'), {
+  type: 'bar',
+  data: {
+    labels: supNames,
+    datasets: supQualKeys.map((q, qi) => ({
+      label: supQualLabels[q],
+      data: supByQty.map(s => supSpecTotals[q] > 0 ? +((s[q] / supSpecTotals[q] * 100).toFixed(1)) : 0),
+      backgroundColor: supPalette[qi],
+      borderRadius: 4,
+    }))
+  },
+  options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { font: { size: 10 }, padding: 8 } }, tooltip: { callbacks: { label: c => ` ${c.dataset.label}: ${c.raw}% من الإجمالي` } } }, scales: { x: { grid: { display: false } }, y: { max: 60, ticks: { callback: v => v + '%' }, grid: { color: '#e8f0e6' } } } }
+});
+
+// --- موردين: المصفوفات ---
+function buildSupMatrix(tableId, asPercent) {
+  const tbl = document.getElementById(tableId);
+  const cols = ['premium', 'delight', 'classic', 'g4', 'gc', 'other'];
+  const colNames = ['Premium', 'Delight', 'Classic', 'G4', 'Golden Crown', 'أخرى'];
+  const colColors = ['#1B4F72', '#2D6A4F', '#7A5230', '#B71C1C', '#8E44AD', '#9E9E9E'];
+
+  let html = `<thead><tr><th style="background:#1A2B1A;color:#fff;min-width:130px">المورد</th>`;
+  colNames.forEach((c, i) => html += `<th style="background:${colColors[i]};color:#fff;min-width:85px;text-align:center">${c}</th>`);
+  html += `<th style="background:#555;color:#fff;text-align:center">الإجمالي</th><th style="background:#333;color:#fff;text-align:center">جودة عالية</th></tr></thead><tbody>`;
+
+  const colMax = {};
+  cols.forEach(c => { colMax[c] = Math.max(...supData.map(s => asPercent ? s[c] / s.qty * 100 : s[c])); });
+
+  supByQty.forEach(s => {
+    html += `<tr><td style="font-weight:600;font-size:.82rem">${s.name} <span style="font-size:.7rem;color:#888">${s.ex ? 'EX' : ''}</span></td>`;
+    cols.forEach((c, ci) => {
+      const raw = asPercent ? +(s[c] / s.qty * 100).toFixed(1) : s[c];
+      const intensity = colMax[c] > 0 ? raw / colMax[c] : 0;
+      const alpha = raw > 0 ? (0.15 + intensity * 0.7).toFixed(2) : 0;
+      const bg = raw > 0 ? `${colColors[ci]}${Math.round(alpha * 255).toString(16).padStart(2, '0')}` : '#f9f9f9';
+      const textColor = intensity > 0.5 ? '#fff' : raw > 0 ? colColors[ci] : '#ccc';
+      html += `<td class="heat-cell" style="background:${bg};color:${textColor}">${raw > 0 ? (asPercent ? raw + '%' : supFmt(raw)) : '—'}</td>`;
+    });
+    const hqVal = asPercent ? s.hq + '%' : supFmt(Math.round(s.qty * s.hq / 100));
+    html += `<td style="text-align:center;font-weight:700;background:#e8f0e6">${asPercent ? '—' : supFmt(s.qty)}</td>
+             <td style="text-align:center;font-weight:800;color:${s.hq >= 75 ? '#2E7D32' : s.hq >= 55 ? '#E65100' : '#B71C1C'}">${hqVal}</td></tr>`;
+  });
+
+  if (!asPercent) {
+    html += `<tr style="background:#e8f0e6;font-weight:700"><td>الإجمالي</td>`;
+    cols.forEach((c, ci) => html += `<td style="text-align:center;color:${supPalette[ci]}">${supFmt(supSpecTotals[c])}</td>`);
+    html += `<td style="text-align:center">${supFmt(SUP_TOTAL)}</td><td style="text-align:center;color:#2E7D32">${supFmt(Math.round(SUP_TOTAL * 0.724))}</td></tr>`;
+  }
+  html += `</tbody>`;
+  tbl.innerHTML = html;
+}
+buildSupMatrix('supQualityMatrix', false);
+buildSupMatrix('supPctMatrix', true);
+
+// --- موردين: خطة العمل ---
+const supTiers = [
+  { title: '⭐ الامتياز المضمون', color: '#2E7D32', bg: '#e8f5e9', border: '#2E7D32', sups: ['Segam1_EX', 'Segam2_EX'], strategy: 'تحفيز وتثبيت — زيادة الكميات مع ضمان نفس معايير الجودة' },
+  { title: '📈 الفرص الواعدة', color: '#E65100', bg: '#fff3e0', border: '#E65100', sups: ['El_Maleka_EX', 'Strick_EX', 'El_Gendy_EX', 'El_Gewshy_EX'], strategy: 'الضغط على زيادة الكميات 50–100% مع الحفاظ على نفس معايير الجودة' },
+  { title: '🟡 تطوير مستهدف', color: '#1565C0', bg: '#e3f2fd', border: '#1565C0', sups: ['Shahd_EX', 'El_Maha_EX', 'PalmEgypt_EX'], strategy: 'تحسين نسبة Premium ومعالجة Golden Crown — جلسات متابعة دورية' },
+  { title: '🔴 تدخل عاجل', color: '#B71C1C', bg: '#ffebee', border: '#B71C1C', sups: ['Lehaa_EX'], strategy: 'إبلاغ رسمي: حد أقصى G4+GC = 20% في عقود 2026' },
+];
+const supTierDiv = document.getElementById('supTierCards');
+supTiers.forEach(t => {
+  const supInfo = t.sups.map(n => { const s = supData.find(x => x.name === n); return `${n} (${s.hq}%)`; }).join(' — ');
+  supTierDiv.innerHTML += `
+  <div style="background:${t.bg};border-radius:12px;padding:16px 20px;margin-bottom:10px;border-right:5px solid ${t.border}">
+    <div style="font-weight:800;font-size:.95rem;color:${t.color};margin-bottom:6px">${t.title}</div>
+    <div style="font-size:.85rem;color:#333;margin-bottom:8px"><strong>الموردون:</strong> ${supInfo}</div>
+    <div style="font-size:.82rem;color:#555;background:#ffffff88;border-radius:8px;padding:8px 12px">📌 ${t.strategy}</div>
+  </div>`;
+});
+
+const supP1 = [
+  { icon: '🛑', title: 'كتالوج مواصفات صارم', body: 'تحديد حد أقصى G4+GC = 20% في كل عقود EX لموسم 2026' },
+  { icon: '📋', title: 'Cap على Lehaa_EX', body: 'إبلاغ رسمي: لن نقبل موسم 2026 أي شحنة نسبة G4 فيها تتجاوز 15%' },
+];
+const supP1Div = document.getElementById('supP1Actions');
+supP1.forEach(a => { supP1Div.innerHTML += `<div style="background:#ffebee;border-radius:10px;padding:14px 16px;border-right:4px solid #B71C1C"><div style="font-weight:700;font-size:.88rem;color:#B71C1C;margin-bottom:5px">${a.icon} ${a.title}</div><div style="font-size:.82rem;color:#444">${a.body}</div></div>`; });
+
+const supP2 = [
+  { icon: '🌱', title: 'دعم تطوير الموردين من المزارع', body: 'توفير جداول فرز مرجعية ومعايير جودة واضحة للموردين' },
+  { icon: '📈', title: 'توسيع الفرص الواعدة', body: 'التفاوض مع El_Maleka_EX وStrick_EX وEl_Gendy_EX لرفع كمياتهم 50–100%' },
+];
+const supP2Div = document.getElementById('supP2Actions');
+supP2.forEach(a => { supP2Div.innerHTML += `<div style="background:#fff3e0;border-radius:10px;padding:14px 16px;border-right:4px solid #E65100"><div style="font-weight:700;font-size:.88rem;color:#E65100;margin-bottom:5px">${a.icon} ${a.title}</div><div style="font-size:.82rem;color:#444">${a.body}</div></div>`; });
+
+const supP3 = [
+  { icon: '🌍', title: 'تنويع مصادر Premium', body: 'Raw_1 يورد 44.4% من Premium وحده — خطر تركّز!' },
+  { icon: '📊', title: 'داشبورد رصد ومتابعة شهري', body: 'تقرير شهري تلقائي لنسب الجودة خلال الموسم' },
+  { icon: '🤝', title: 'برنامج تقييم سنوي للموردين', body: 'تقييم سنوي رسمي لكل مورد EX يحدد تجديد العقد' },
+];
+const supP3Div = document.getElementById('supP3Actions');
+supP3.forEach(a => { supP3Div.innerHTML += `<div style="background:#e8f5e9;border-radius:10px;padding:14px 16px;border-right:4px solid #2E7D32"><div style="font-weight:700;font-size:.88rem;color:#2E7D32;margin-bottom:5px">${a.icon} ${a.title}</div><div style="font-size:.82rem;color:#444">${a.body}</div></div>`; });
+
+const supRisks = [
+  { icon: '⚠️', label: 'تركّز Premium في مورد واحد', val: '44.4%', desc: 'Raw_1 يورد 44% من Premium — لو انقطع التوريد تنهار الجودة', c: '#B71C1C' },
+  { icon: '🔴', label: 'Lehaa_EX يضخّ 46% من G4', val: '32,548 كجم', desc: 'مورد واحد مسؤول عن نصف مشكلة G4', c: '#B71C1C' },
+  { icon: '📦', label: 'الموردون الصغار غير مستغلين', val: '8,560 كجم', desc: 'El_Maleka + Strick + El_Gendy = 8.5K كجم فقط بجودة ممتازة', c: '#E65100' },
+  { icon: '📉', label: 'El_Maha_EX كبير الكمية منخفض الجودة', val: '55.5%', desc: '34,350 كجم بجودة عالية 55.5%', c: '#E65100' },
+];
+const supRSec = document.getElementById('supRiskSection');
+supRisks.forEach(r => {
+  supRSec.innerHTML += `<div style="display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:10px;background:#fff;border-right:4px solid ${r.c};box-shadow:0 1px 6px rgba(0,0,0,.08)">
+    <div style="font-size:1.6rem">${r.icon}</div>
+    <div style="flex:1"><div style="font-weight:700;font-size:.88rem;color:${r.c}">${r.label}</div>
+    <div style="font-size:.78rem;color:#666;margin-top:2px">${r.desc}</div></div>
+    <div style="font-weight:900;font-size:1rem;color:${r.c}">${r.val}</div></div>`;
+});
+
+// =============================================================
+// 7. رسم الرسوم البيانية للمبيعات
+// =============================================================
+// --- مبيعات: الشهري ---
+new Chart(document.getElementById('salesMonthlyChart'), {
+  type: 'bar',
+  data: {
+    labels: salesMonths,
+    datasets: [{
+      label: 'الكمية (كجم)',
+      data: salesMonthlyTotal,
+      backgroundColor: salesMonthlyTotal.map((v, i) => i === 1 ? '#C9962A' : '#E8BF6A99'),
+      borderColor: salesMonthlyTotal.map((v, i) => i === 1 ? '#8A650C' : '#C9962A'),
+      borderWidth: 1.5,
+      borderRadius: 8
+    }]
+  },
+  options: { responsive: true, plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ' ' + salesFmt(c.raw) + ' كجم' } } }, scales: { y: { ticks: { callback: v => (v / 1000).toFixed(0) + 'K' }, grid: { color: '#f0ead8' } }, x: { grid: { display: false } } } }
+});
+
+// --- مبيعات: Donut الجودة ---
+new Chart(document.getElementById('salesQualityDonut'), {
+  type: 'doughnut',
+  data: {
+    labels: Object.keys(salesQualityTotals),
+    datasets: [{ data: Object.values(salesQualityTotals), backgroundColor: Object.values(salesQualityColors), borderWidth: 2, borderColor: '#fff' }]
+  },
+  options: { responsive: true, cutout: '58%', plugins: { legend: { position: 'bottom', labels: { font: { size: 10 }, padding: 8 } }, tooltip: { callbacks: { label: c => ' ' + salesFmt(c.raw) + ' كجم (' + salesPct(c.raw) + ')' } } } }
+});
+
+// --- مبيعات: حصة العملاء ---
+new Chart(document.getElementById('salesCustShareChart'), {
+  type: 'pie',
+  data: {
+    labels: salesCustNames,
+    datasets: [{ data: salesCustomers.map(c => c.qty), backgroundColor: salesPalette, borderWidth: 2, borderColor: '#fff' }]
+  },
+  options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { font: { size: 10 }, padding: 8 } }, tooltip: { callbacks: { label: c => ' ' + salesFmt(c.raw) + ' كجم (' + salesPct(c.raw) + ')' } } } }
+});
+
+// --- مبيعات: الدول ---
+const salesCountries = [{ name: 'تركيا', flag: '🇹🇷', qty: 388580 }, { name: 'الإمارات', flag: '🇦🇪', qty: 45000 }, { name: 'إنجلترا', flag: '🇬🇧', qty: 29689 }, { name: 'مصر', flag: '🇪🇬', qty: 21190 }];
+const salesCGrid = document.getElementById('salesCountryGrid');
+salesCountries.forEach(c => {
+  const s = ((c.qty / SALES_TOTAL) * 100).toFixed(1);
+  salesCGrid.innerHTML += `<div class="country-pill"><div class="c-flag">${c.flag}</div><div><div class="c-name">${c.name}</div><div class="c-qty">${salesFmt(c.qty)} كجم</div></div><div class="c-pct">${s}%</div></div>`;
+});
+new Chart(document.getElementById('salesCountryChart'), {
+  type: 'bar',
+  data: { labels: salesCountries.map(c => c.name), datasets: [{ data: salesCountries.map(c => c.qty), backgroundColor: ['#C9962A', '#2D6A4F', '#1B4F72', '#7A5230'], borderRadius: 8, borderSkipped: false }] },
+  options: { indexAxis: 'y', responsive: true, plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ' ' + salesFmt(c.raw) + ' كجم' } } }, scales: { x: { ticks: { callback: v => (v / 1000).toFixed(0) + 'K' }, grid: { color: '#f0ead8' } }, y: { grid: { display: false } } } }
+});
+
+// --- مبيعات: جدول العملاء ---
+const salesTbody = document.getElementById('salesCustTable');
+salesCustomers.forEach((c, i) => {
+  const sh = ((c.qty / SALES_TOTAL) * 100).toFixed(1);
+  const avg = Math.round(c.qty / c.inv);
+  const rc = ['r1', 'r2', 'r3'];
+  const bc = salesPalette[i];
+  salesTbody.innerHTML += `<tr>
+    <td><span class="rank-badge ${i < 3 ? rc[i] : 'rn'}">${i + 1}</span></td>
+    <td style="font-weight:600">${c.name}</td>
+    <td style="font-weight:700">${salesFmt(c.qty)}</td>
+    <td><div style="display:flex;align-items:center;gap:8px;"><div class="bar-wrap"><div class="bar" style="width:${sh}%;background:${bc}"></div></div><span style="font-size:.8rem;font-weight:700;color:${bc}">${sh}%</span></div></td>
+    <td style="text-align:center;font-weight:700">${c.inv}</td>
+    <td style="font-weight:600">${salesFmt(avg)}</td>
+  </tr>`;
+});
+
+// --- مبيعات: Bar Chart العملاء ---
+new Chart(document.getElementById('salesCustBarChart'), {
+  type: 'bar',
+  data: { labels: salesCustNames, datasets: [{ label: 'الكمية (كجم)', data: salesCustomers.map(c => c.qty), backgroundColor: salesPalette, borderRadius: 8 }] },
+  options: { indexAxis: 'y', responsive: true, plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ' ' + salesFmt(c.raw) + ' كجم' } } }, scales: { x: { ticks: { callback: v => (v / 1000).toFixed(0) + 'K' }, grid: { color: '#f0ead8' } }, y: { grid: { display: false } } } }
+});
+
+// --- مبيعات: Stacked Chart ---
+const salesQualKeys = ['PREMIUM', 'DELIGHT', 'CLASSIC', 'G4 MIX', 'GOLDEN CROWEN', 'BABY SMALL', 'BON BON'];
+const salesQualColArr = salesQualKeys.map(k => salesQualityColors[k]);
+
+new Chart(document.getElementById('salesCustStackedChart'), {
+  type: 'bar',
+  data: {
+    labels: salesCustNames,
+    datasets: salesQualKeys.map((q, qi) => ({
+      label: q,
+      data: salesCustNames.map(n => salesCustQuality[n][q] || 0),
+      backgroundColor: salesQualColArr[qi],
+      borderRadius: qi === salesQualKeys.length - 1 ? 8 : 0,
+      borderSkipped: false,
+    }))
+  },
+  options: { responsive: true, plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ` ${c.dataset.label}: ${salesFmt(c.raw)} كجم` } } }, scales: { x: { stacked: true, grid: { display: false } }, y: { stacked: true, ticks: { callback: v => (v / 1000).toFixed(0) + 'K' }, grid: { color: '#f0ead8' } } } }
+});
+const salesLeg = document.getElementById('salesStackedLegend');
+salesQualKeys.forEach((q, i) => { salesLeg.innerHTML += `<div class="legend-item"><div class="legend-dot" style="background:${salesQualColArr[i]}"></div><span>${q}</span></div>`; });
+
+// --- مبيعات: Pct Stacked ---
+new Chart(document.getElementById('salesCustPctChart'), {
+  type: 'bar',
+  data: {
+    labels: salesCustNames,
+    datasets: salesQualKeys.map((q, qi) => ({
+      label: q,
+      data: salesCustNames.map(n => {
+        const total = salesCustomers.find(c => c.name === n).qty;
+        const v = salesCustQuality[n][q] || 0;
+        return total > 0 ? +((v / total) * 100).toFixed(1) : 0;
+      }),
+      backgroundColor: salesQualColArr[qi],
+      borderRadius: qi === salesQualKeys.length - 1 ? 8 : 0,
+      borderSkipped: false,
+    }))
+  },
+  options: { responsive: true, plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ` ${c.dataset.label}: ${c.raw}%` } } }, scales: { x: { stacked: true, grid: { display: false } }, y: { stacked: true, max: 100, ticks: { callback: v => v + '%' }, grid: { color: '#f0ead8' } } } }
+});
+
+// --- مبيعات: بطاقات نسبة الجودة ---
+const salesRatioCards = document.getElementById('salesRatioCards');
+const salesHighQuals = ['PREMIUM', 'DELIGHT'];
+const salesLowQuals = ['CLASSIC', 'G4 MIX', 'GOLDEN CROWEN', 'BABY SMALL', 'BON BON', 'JUICY'];
+salesCustNames.forEach((name, i) => {
+  const hi = salesHighQuals.reduce((s, q) => s + (salesCustQuality[name][q] || 0), 0);
+  const lo = salesLowQuals.reduce((s, q) => s + (salesCustQuality[name][q] || 0), 0);
+  const total = hi + lo;
+  const hiPct = total > 0 ? +((hi / total) * 100).toFixed(1) : 0;
+  const loPct = total > 0 ? +((lo / total) * 100).toFixed(1) : 0;
+  const grade = hiPct >= 80 ? { label: 'ممتاز', color: '#2D6A4F', bg: '#e8f5ee' } : hiPct >= 60 ? { label: 'جيد جداً', color: '#1B4F72', bg: '#e8f0fb' } : hiPct >= 40 ? { label: 'متوسط', color: '#C9962A', bg: '#fef9ec' } : { label: 'يحتاج مراجعة', color: '#C0392B', bg: '#fdecea' };
+  salesRatioCards.innerHTML += `
+  <div style="background:#fff;border-radius:12px;padding:16px 20px;box-shadow:0 1px 8px rgba(0,0,0,.07);border-right:5px solid ${salesPalette[i]}">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+      <div style="font-weight:700;font-size:.92rem">${name}</div>
+      <span style="background:${grade.bg};color:${grade.color};font-size:.75rem;font-weight:700;padding:4px 12px;border-radius:20px">${grade.label}</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:0;border-radius:8px;overflow:hidden;height:28px;margin-bottom:10px;">
+      ${hiPct > 0 ? `<div style="width:${hiPct}%;background:linear-gradient(90deg,#1B4F72,#2D6A4F);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.75rem;font-weight:700;min-width:40px">${hiPct}%</div>` : ''}
+      ${loPct > 0 ? `<div style="width:${loPct}%;background:linear-gradient(90deg,#8E44AD,#7A5230);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.75rem;font-weight:700;min-width:40px">${loPct}%</div>` : ''}
+    </div>
+    <div style="display:flex;gap:24px;font-size:.8rem;">
+      <div><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:#1B4F72;margin-left:5px"></span><strong style="color:#1B4F72">جودة عالية:</strong> ${salesFmt(hi)} كجم (${hiPct}%)</div>
+      <div><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:#8E44AD;margin-left:5px"></span><strong style="color:#7A5230">جودة منخفضة:</strong> ${salesFmt(lo)} كجم (${loPct}%)</div>
+    </div>
+  </div>`;
+});
+
+// --- مبيعات: Mini Doughnuts ---
+function salesMiniDoughnut(id, data, colors) {
+  new Chart(document.getElementById(id), {
+    type: 'doughnut',
+    data: { labels: data.map(d => d[0]), datasets: [{ data: data.map(d => d[1]), backgroundColor: colors, borderWidth: 2, borderColor: '#fff' }] },
+    options: { responsive: true, cutout: '50%', plugins: { legend: { position: 'bottom', labels: { font: { size: 10 }, padding: 6 } }, tooltip: { callbacks: { label: c => ' ' + salesFmt(c.raw) + ' كجم' } } } }
+  });
+}
+const salesBlueShades = ['#1B4F72', '#2E86C1', '#5DADE2', '#85C1E9', '#AED6F1'];
+const salesGreenShades = ['#1B5E20', '#2D6A4F', '#388E3C', '#52B788', '#A5D6A7'];
+const salesBrownShades = ['#4E342E', '#6D4C41', '#795548', '#A1887F', '#D7CCC8'];
+const salesPurpleShades = ['#4A148C', '#6A1B9A', '#8E44AD', '#AB47BC'];
+const salesGoldShades = ['#7D5A00', '#B8860B', '#C9962A', '#E8BF6A'];
+
+salesMiniDoughnut('salesPremiumChart', salesPremiumProds, salesBlueShades);
+salesMiniDoughnut('salesDelightChart', salesDelightProds, salesGreenShades);
+salesMiniDoughnut('salesClassicChart', salesClassicProds, salesBrownShades);
+salesMiniDoughnut('salesG4Chart', salesG4Prods, salesPurpleShades);
+salesMiniDoughnut('salesGoldenChart', salesGoldenProds, salesGoldShades);
+
+// --- مبيعات: Top 10 ---
+const salesTop10 = [...salesPremiumProds, ...salesDelightProds].sort((a, b) => b[1] - a[1]).slice(0, 10);
+const salesTop10Colors = ['#1B4F72', '#2D6A4F', '#1B4F72', '#2D6A4F', '#7A5230', '#1B4F72', '#8E44AD', '#2D6A4F', '#C9962A', '#2D6A4F'];
+new Chart(document.getElementById('salesTop10Chart'), {
+  type: 'bar',
+  data: { labels: salesTop10.map(p => p[0]), datasets: [{ label: 'كجم', data: salesTop10.map(p => p[1]), backgroundColor: salesTop10Colors, borderRadius: 8, borderSkipped: false }] },
+  options: { responsive: true, plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ' ' + salesFmt(c.raw) + ' كجم' } } }, scales: { y: { ticks: { callback: v => (v / 1000).toFixed(0) + 'K' }, grid: { color: '#f0ead8' } }, x: { grid: { display: false }, ticks: { maxRotation: 30, font: { size: 10 } } } } }
+});
+
+// --- مبيعات: المصفوفات ---
+function buildSalesMatrix(tableId, rowHeaders, colData, rowTotals) {
+  const tbl = document.getElementById(tableId);
+  const cols = ['PREMIUM', 'DELIGHT', 'CLASSIC', 'G4 MIX', 'GOLDEN CROWEN', 'BABY SMALL', 'BON BON', 'JUICY'];
+  const colNames = ['Premium', 'Delight', 'Classic', 'G4 Mix', 'Golden Crowen', 'Baby Small', 'Bon Bon', 'Juicy'];
+  const colColors = ['#1B4F72', '#2D6A4F', '#7A5230', '#8E44AD', '#C9962A', '#E67E22', '#C0392B', '#16A085'];
+
+  let html = `<thead><tr><th style="background:#1A120B;color:#fff;min-width:130px;">العميل</th>`;
+  cols.forEach((c, i) => html += `<th style="background:${colColors[i]};color:#fff;min-width:90px;text-align:center">${colNames[i]}</th>`);
+  html += `<th style="background:#555;color:#fff;text-align:center">الإجمالي</th></tr></thead><tbody>`;
+
+  const colMax = {};
+  cols.forEach(c => { colMax[c] = Math.max(...salesCustNames.map(n => salesCustQuality[n][c] || 0)); });
+  const grandTotal = {};
+  cols.forEach(c => { grandTotal[c] = salesCustNames.reduce((s, n) => s + (salesCustQuality[n][c] || 0), 0); });
+
+  salesCustNames.forEach((name, ri) => {
+    const rowTotal = salesCustomers[ri].qty;
+    html += `<tr><td style="font-weight:600;font-size:.82rem">${name}</td>`;
+    cols.forEach((c, ci) => {
+      const v = salesCustQuality[name][c] || 0;
+      const intensity = colMax[c] > 0 ? v / colMax[c] : 0;
+      const alpha = v > 0 ? (0.15 + intensity * 0.7).toFixed(2) : 0;
+      const bg = v > 0 ? `${colColors[ci]}${Math.round(alpha * 255).toString(16).padStart(2, '0')}` : '#f9f9f9';
+      const textColor = intensity > 0.5 ? '#fff' : v > 0 ? colColors[ci] : '#ccc';
+      html += `<td class="heat-cell" style="background:${bg};color:${textColor}">${v > 0 ? salesFmt(v) : '—'}</td>`;
+    });
+    html += `<td style="text-align:center;font-weight:700;background:#f5edd8">${salesFmt(rowTotal)}</td></tr>`;
+  });
+
+  html += `<tr class="total-row"><td style="font-weight:700;font-size:.82rem">الإجمالي</td>`;
+  cols.forEach(c => { html += `<td style="text-align:center;font-weight:700">${salesFmt(grandTotal[c] || 0)}</td>`; });
+  html += `<td style="text-align:center;font-weight:700">${salesFmt(SALES_TOTAL)}</td></tr>`;
+  html += `</tbody>`;
+  tbl.innerHTML = html;
+}
+buildSalesMatrix('salesQualityMatrix');
+
+// --- مبيعات: مصفوفة المنتجات ---
+function buildSalesProductMatrix() {
+  const tbl = document.getElementById('salesProductMatrix');
+  const topProds = ['Premium Large', 'Premium Medium', 'Premium Small', 'Delight Large', 'Delight Medium', 'Delight Small', 'Classic Large', 'Grade C Extra Small', 'Grade C Extra Large', 'Golden Crowen Extra Small', 'Golden Crowen Extra Large', 'Bon Bon'];
+  const prodColors = ['#1B4F72', '#2E86C1', '#5DADE2', '#2D6A4F', '#388E3C', '#52B788', '#7A5230', '#8E44AD', '#AB47BC', '#C9962A', '#E8BF6A', '#C0392B'];
+
+  let html = `<thead><tr><th style="background:#1A120B;color:#fff;min-width:130px;">العميل</th>`;
+  topProds.forEach((p, i) => html += `<th style="background:${prodColors[i]};color:#fff;min-width:80px;text-align:center;font-size:.7rem;writing-mode:vertical-lr;transform:rotate(180deg);padding:8px 4px;height:80px">${p}</th>`);
+  html += `</tr></thead><tbody>`;
+
+  const prodMax = {};
+  topProds.forEach(p => { prodMax[p] = Math.max(...salesCustNames.map(n => salesCustProduct[n][p] || 0)); });
+
+  salesCustNames.forEach((name) => {
+    html += `<tr><td style="font-weight:600;font-size:.82rem">${name}</td>`;
+    topProds.forEach((p, pi) => {
+      const v = salesCustProduct[name][p] || 0;
+      const intensity = prodMax[p] > 0 ? v / prodMax[p] : 0;
+      const alpha = v > 0 ? (0.15 + intensity * 0.75).toFixed(2) : 0;
+      const bg = v > 0 ? `${prodColors[pi]}${Math.round(alpha * 255).toString(16).padStart(2, '0')}` : '#f9f9f9';
+      const textColor = intensity > 0.5 ? '#fff' : v > 0 ? prodColors[pi] : '#ccc';
+      html += `<td class="heat-cell" style="background:${bg};color:${textColor}">${v > 0 ? salesFmt(v) : '—'}</td>`;
+    });
+    html += `</tr>`;
+  });
+  html += `</tbody>`;
+  tbl.innerHTML = html;
+}
+buildSalesProductMatrix();
+
+// --- مبيعات: Trend Chart ---
+new Chart(document.getElementById('salesTrendChart'), {
+  type: 'line',
+  data: {
+    labels: salesMonths,
+    datasets: salesCustNames.map((name, i) => ({
+      label: name,
+      data: salesCustMonthly[name],
+      borderColor: salesPalette[i],
+      backgroundColor: salesPalette[i] + '22',
+      fill: false,
+      tension: 0.4,
+      borderWidth: 2.5,
+      pointRadius: 5,
+      pointHoverRadius: 7,
+    }))
+  },
+  options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { font: { size: 10 }, padding: 10 } }, tooltip: { callbacks: { label: c => ` ${c.dataset.label}: ${salesFmt(c.raw)} كجم` } } }, scales: { y: { ticks: { callback: v => (v / 1000).toFixed(0) + 'K' }, grid: { color: '#f0ead8' } }, x: { grid: { color: '#f0ead8' } } } }
+});
+
+// --- مبيعات: الجدول الشهري ---
+const salesMTbl = document.getElementById('salesMonthlyTable');
+let salesMHtml = `<thead style="font-size:.78rem"><tr><th style="background:var(--sand);padding:8px 10px;font-weight:700">العميل</th>`;
+salesMonths.forEach(m => salesMHtml += `<th style="background:var(--sand);padding:8px 10px;font-weight:700;text-align:center">${m}</th>`);
+salesMHtml += `<th style="background:var(--sand);padding:8px 10px;font-weight:700;text-align:center">الإجمالي</th></tr></thead><tbody>`;
+salesCustNames.forEach((name, i) => {
+  salesMHtml += `<tr><td style="font-weight:600;font-size:.8rem;padding:7px 10px;border-bottom:1px solid #f0ead8">${name}</td>`;
+  salesCustMonthly[name].forEach(v => {
+    salesMHtml += `<td style="text-align:center;font-size:.8rem;padding:7px 10px;border-bottom:1px solid #f0ead8;color:${v > 0 ? salesPalette[i] : '#ccc'};font-weight:${v > 0 ? 700 : 400}">${v > 0 ? salesFmt(v) : '—'}</td>`;
+  });
+  salesMHtml += `<td style="text-align:center;font-weight:700;font-size:.8rem;padding:7px 10px;border-bottom:1px solid #f0ead8;background:#faf8f4">${salesFmt(salesCustomers[i].qty)}</td></tr>`;
+});
+salesMHtml += `</tbody>`;
+salesMTbl.innerHTML = salesMHtml;
+salesMTbl.style.cssText = 'width:100%;border-collapse:collapse;';
+
+// --- مبيعات: المخاطر ---
+const salesRisks = [
+  { label: 'تركيز عميل واحد', icon: '⚠️', val: '52.4%', desc: 'Omar Anadoul يمثل أكثر من نصف المبيعات — مخاطرة عالية', color: '#C0392B' },
+  { label: 'هيمنة السوق التركي', icon: '🌍', val: '80.2%', desc: 'تركيا تستحوذ على 388,580 كجم — ضرورة التنويع', color: '#E67E22' },
+  { label: 'موسمية حادة', icon: '📉', val: '−92.5%', desc: 'انخفاض من أكتوبر (165K) لفبراير (12K)', color: '#8E44AD' },
+  { label: 'PREMIUM يقود الطلب', icon: '⭐', val: '40.1%', desc: 'الطلب على Premium مرتفع — فرصة تسعير ممتازة', color: '#1B4F72' },
+];
+const salesRSec = document.getElementById('salesRiskSection');
+salesRisks.forEach(r => {
+  salesRSec.innerHTML += `<div style="display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:10px;background:#fff;border-right:4px solid ${r.color};box-shadow:0 1px 6px rgba(0,0,0,.08)">
+    <div style="font-size:1.6rem">${r.icon}</div>
+    <div style="flex:1"><div style="font-weight:700;font-size:.88rem;color:${r.color}">${r.label}</div>
+    <div style="font-size:.78rem;color:#666;margin-top:2px">${r.desc}</div></div>
+    <div style="font-weight:900;font-size:1.1rem;color:${r.color}">${r.val}</div></div>`;
+});
+
+// =============================================================
+// 8. تهيئة أولية - عرض الصفحة الرئيسية
+// =============================================================
+// التأكد من أن الصفحة الرئيسية هي الظاهرة عند التحميل
+document.addEventListener('DOMContentLoaded', function() {
+  // إظهار تبويب الرئيسية
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-landing').classList.add('active');
+  document.querySelectorAll('.nav-tabs > .tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('.nav-tabs > .tab-btn:first-child').classList.add('active');
+  
+  // إظهار التبويب الداخلي الأول للموردين
+  document.querySelectorAll('#page-suppliers .page').forEach(p => p.style.display = 'none');
+  document.getElementById('sup-page-overview').style.display = 'block';
+  
+  // إظهار التبويب الداخلي الأول للمبيعات
+  document.querySelectorAll('#page-sales .page').forEach(p => p.style.display = 'none');
+  document.getElementById('sales-page-overview').style.display = 'block';
+  
+  // تحديث حجم الرسوم البيانية
+  setTimeout(() => {
+    Chart.instances.forEach(chart => chart.resize());
+  }, 300);
+});
+</script>
+</body>
+</html>
